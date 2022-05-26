@@ -1,9 +1,12 @@
 x = 200
 y = 100
 
+speed = 50
 xspeed = 4
 yspeed = 4
-
+playery = 450
+playery2 = 450
+mode = 0 
 
 def setup():
     size (1000,1000)
@@ -22,6 +25,8 @@ def game():
     design()
   
     ellipse(x,y,20,20)
+    rect(100, playery, 10, 100)
+    rect(900, playery2, 10, 100)
     x += xspeed
     y += yspeed
        
@@ -61,6 +66,22 @@ def design():
     for i in range(20):
         rect(500,50*i,15,30)
 
+def keyPressed():
+    global speed, playery2,playery
+    
+  
+    if ((key) and ((key == 'w') or (key == 'W')) and mode == 0):
+        playery += -speed
+
+ 
+    elif ((key) and ((key == 's') or (key == 'S'))and mode == 0):
+        playery += speed
+            
+    elif (keyCode == UP and mode == 0):
+        playery2 += -speed
+    
+    elif (keyCode == DOWN and mode == 0):
+        playery2 += speed
 
     
 
