@@ -6,6 +6,8 @@ xspeed = 4
 yspeed = 4
 playery = 450
 playery2 = 450
+score1 = 0
+score2 = 0
 mode = 0 
 
 def setup():
@@ -23,7 +25,8 @@ def game():
     global x,y,playerx,playery,mode,score1,score2
     background(0)
     design()
-  
+    player1score()
+    player2score()
     ellipse(x,y,20,20)
     rect(100, playery, 10, 100)
     rect(900, playery2, 10, 100)
@@ -46,6 +49,7 @@ def detect_hit():
 def win():
     global score1, score2,x,y,yspeed,xspeed
     if x >= width-15 :
+        score1 = score1 + 1
         yspeed = yspeed
         xspeed = xspeed
         x = 200
@@ -60,12 +64,21 @@ def win():
         x = 200
         y = 100
         return
-        
+     
 
 def design():
     for i in range(20):
         rect(500,50*i,15,30)
-
+def player1score():
+    fill(255)
+    textSize(300)
+    text(score1,10,250)
+# player Y score
+def player2score():
+    fill(255)
+    textSize(300)
+    text(score2,790,250)
+    
 def keyPressed():
     global speed, playery2,playery
     
