@@ -46,6 +46,39 @@ def detect_hit():
         yspeed = yspeed * -1.01
     
 
+    if x >= 900 and x <= 910:
+        if y <= playery2+100 and y >= playery2-40:
+            xspeed = -4
+            yspeed = 4
+            
+    if x >= 900 and x <= 910:
+        if y >= playery2+40 and y <= playery2+60:
+            xspeed = -4
+            yspeed = 0
+    
+                    
+    if x >= 900 and x <= 910:
+        if y >= playery2+60 and y <= playery2+100:
+            yspeed = -4
+            xspeed = -4
+      
+            
+    if x >= 100 and x <= 115 :
+        if y <= playery+100 and y >= playery-40:
+            xspeed = 4
+            yspeed = 4
+          
+    if x >= 100 and x <= 115 :
+        if y >= playery+40 and y <= playery+60:
+            xspeed = 4
+            yspeed = 0
+            
+    if x >= 100 and x <= 115:
+        if y >= playery+60 and y <= playery+100:
+            yspeed = -4
+            xspeed = 4
+    
+
 def win():
     global score1, score2,x,y,yspeed,xspeed
     if x >= width-15 :
