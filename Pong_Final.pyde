@@ -1,7 +1,6 @@
 x = 200
 y = 100
 
-speed = 50
 xspeed = 4
 yspeed = 4
 playery = 450
@@ -9,6 +8,10 @@ playery2 = 450
 score1 = 0
 score2 = 0
 mode = 0 
+ball_speed_up = 50
+ball_speed_down = 50
+ball_speed_up2 = 50
+ball_speed_down2 = 50
 
 def setup():
     size (1000,1000)
@@ -113,21 +116,34 @@ def player2score():
     text(score2,790,250)
     
 def keyPressed():
-    global speed, playery2,playery
+    global speed, playery2,playery,ball_speed_up,ball_speed_down,ball_speed_up2,ball_speed_down2
     
   
     if ((key) and ((key == 'w') or (key == 'W')) and mode == 0):
-        playery += -speed
-
- 
+        playery += -ball_speed_up
+        ball_speed_down = 50
+        if playery <= 0:
+            ball_speed_up = 0
+    
     elif ((key) and ((key == 's') or (key == 'S'))and mode == 0):
-        playery += speed
-            
-    elif (keyCode == UP and mode == 0):
-        playery2 += -speed
+        playery += ball_speed_down
+        ball_speed_up = 50
+        if playery >= 900:
+            ball_speed_down = 0
+
+
+
+    if (keyCode == UP and mode == 0):
+        playery2 += -ball_speed_up2
+        ball_speed_down2 = 50
+        if playery2 <= 0:
+            ball_speed_up2 = 0
     
     elif (keyCode == DOWN and mode == 0):
-        playery2 += speed
+        playery2 += ball_speed_down2
+        ball_speed_up2 = 50
+        if playery2 >= 900:
+            ball_speed_down2 = 0
 
     
 
