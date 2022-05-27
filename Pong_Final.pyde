@@ -20,8 +20,10 @@ def draw():
     global x,y,playerx,playery,mode,score1,score2
     
     background(0)
-
-    game()
+    if mode == 0:
+        game()
+    elif mode == 1:
+        game_over()
    
         
 def game():
@@ -39,7 +41,7 @@ def game():
     detect_hit()
 
 def detect_hit():
-    global x,y,speed,xspeed,yspeed,playery,score1,score2,mode,playery2
+    global x,y,xspeed,yspeed,playery,score1,score2,mode,playery2
 
     
     win()
@@ -83,7 +85,7 @@ def detect_hit():
     
 
 def win():
-    global score1, score2,x,y,yspeed,xspeed
+    global score1, score2,x,y,yspeed,xspeed,mode
     if x >= width-15 :
         score1 = score1 + 1
         yspeed = yspeed
@@ -100,15 +102,31 @@ def win():
         x = 200
         y = 100
         return
-     
+
+    if score1 == 9:
+        mode = 1
+    elif score2 == 9:
+        mode = 1
+def game_over():
+    global x,y,xspeed,yspeed,ball_speed_down,ball_speed_up2,ball_speed_down2
+
+    background(0,0,0,100)
+    xspeed = 0
+    yspeed
+    ball_speed_up = 0
+    ball_speed_down = 0
+    ball_speed_up2 = 0
+    ball_speed_down2 = 0
 
 def design():
     for i in range(20):
         rect(500,50*i,15,30)
+        
 def player1score():
     fill(255)
     textSize(300)
     text(score1,10,250)
+    
 # player Y score
 def player2score():
     fill(255)
