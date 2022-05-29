@@ -1,3 +1,6 @@
+add_library('minim')    # add minim audio library
+
+
 x = 200
 y = 100
 
@@ -10,13 +13,19 @@ score2 = 0
 mode = 0 
 ball_speed_up = 20
 ball_speed_down = 20
-ball_speed_up2 = 50
-ball_speed_down2 = 50
+ball_speed_up2 = 20
+ball_speed_down2 = 20
 
 def setup():
+    global wall,score,paddle
     size (1000,1000)
     frameRate(120)
-    
+    minim=Minim(this)
+    score = minim.loadFile("Pong Score.mp3")
+    paddle = minim.loadFile("Pong Paddle.mp3")
+    wall = minim.loadFile("Pong Wall.mp3")
+
+
 
 
   
@@ -77,66 +86,85 @@ def game():
     detect_hit()
 
 def detect_hit():
-    global x,y,xspeed,yspeed,playery,score1,score2,mode,playery2
+    global x,y,xspeed,yspeed,playery,score1,score2,mode,playery2,score,wall,paddle
 
     
     win()
     if y >= height-15:
+        wall.play()
         yspeed = yspeed * -1.01
+        wall.rewind()
     elif y <= 15:
+        wall.play()
         yspeed = yspeed * -1.01
-    
+        wall.rewind()
+
 
     if x >= 900 and x <= 900:
         if y <= playery2+100 and y >= playery2-40:
+            paddle.play()
             xspeed = -5
             yspeed = -5
-            
+            paddle.rewind()
+
     if x >= 900 and x <= 900:
         if y >= playery2+40 and y <= playery2+60:
+            paddle.play()
             xspeed = -5
             yspeed = 0
-    
+            paddle.rewind()
+
                     
     if x >= 900 and x <= 900:
         if y >= playery2+60 and y <= playery2+100:
+            paddle.play()
             yspeed = 5
             xspeed = -5
-      
+            paddle.rewind()
+
             
-    if x >= 100 and x <= 105 :
+    if x >= 100 and x <= 100 :
         if y <= playery+100 and y >= playery-40:
+            paddle.play()
             xspeed = 5
             yspeed = -5
-          
-    if x >= 100 and x <= 105 :
+            paddle.rewind()
+
+    if x >= 100 and x <= 100 :
         if y >= playery+40 and y <= playery+60:
+            paddle.play()
             xspeed = 5
             yspeed = 0
-            
-    if x >= 100 and x <= 105:
+            paddle.rewind()
+
+    if x >= 100 and x <= 100:
         if y >= playery+60 and y <= playery+100:
+            paddle.play()
             yspeed = 5
             xspeed = 5
-    
+            paddle.rewind()
 
 def win():
     global score1, score2,x,y,yspeed,xspeed,mode
     if x >= width-15 :
+        score.play()
         score1 = score1 + 1
         yspeed = yspeed
         xspeed = xspeed
         x = 200
         y = 100
+        score.rewind()
         return
 
         
     elif x <= 15:
+        score.play()
         score2 = score2 + 1
         yspeed = -yspeed
         xspeed = -xspeed
         x = 200
         y = 100
+        score.rewind()
         return
 
     if score1 == 9:
@@ -169,39 +197,4 @@ def player2score():
     textSize(300)
     text(score2,575,250)
     
-'''def keyPressed():
-    global speed, playery2,playery,ball_speed_up,ball_speed_down,ball_speed_up2,ball_speed_down2
     
-  
-    if ((key) and ((key == 'w') or (key == 'W')) and mode == 0):
-        playery += -ball_speed_up
-        ball_speed_down = 50
-        if playery <= 0:
-            ball_speed_up = 0
-    
-    elif ((key) and ((key == 's') or (key == 'S'))and mode == 0):
-        playery += ball_speed_down
-        ball_speed_up = 50
-        if playery >= 900:
-            ball_speed_down = 0
-
-
-
-    if (keyCode == UP and mode == 0):
-        playery2 += -ball_speed_up2
-        ball_speed_down2 = 50
-        if playery2 <= 0:
-            ball_speed_up2 = 0
-    
-    elif (keyCode == DOWN and mode == 0):
-        playery2 += ball_speed_down2
-        ball_speed_up2 = 50
-        if playery2 >= 900:
-            ball_speed_down2 = 0'''
-
-    
-
-
-    
-
-        
