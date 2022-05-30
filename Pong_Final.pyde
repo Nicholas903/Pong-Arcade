@@ -12,6 +12,7 @@ score1 = 0
 score2 = 0
 mode = 0 
 new_game = True
+ball = 0
 
 ball_speed_up = 20
 ball_speed_down = 20
@@ -80,14 +81,14 @@ def keyReleased():
     
 def ball_path():
     global x,y,ball
-    ball = random.randrange(1,7)
+    ball = random.randrange(1,2)
     
     
 def game():
     global playerx,playery,mode,score1,score2,ball
 
     background(0)
-    ball_direction()
+    detect_hit()
 
     design()
     player1score()
@@ -96,11 +97,13 @@ def game():
     rect(100, playery, 10, 100)
     rect(900, playery2, 10, 100)
 
-    detect_hit()
+    
 
 def detect_hit():
     global x,y,xspeed,yspeed,playery,score1,score2,mode,playery2,score,wall,paddle
     win()
+    ball_direction()
+
     if y >= height-15:
         wall.play()
         yspeed = yspeed * -1.01
@@ -110,15 +113,15 @@ def detect_hit():
         yspeed = yspeed * -1.01
         wall.rewind()
 
-
-    if x >= 900 and x <= 900:
+    print(x,y)
+    if x >= 900 and x <= 910:
         if y <= playery2+100 and y >= playery2-40:
             paddle.play()
             xspeed = -5
             yspeed = -5
             paddle.rewind()
 
-    if x >= 900 and x <= 900:
+    if x >= 900 and x <= 910:
         if y >= playery2+40 and y <= playery2+60:
             paddle.play()
             xspeed = -5
@@ -126,29 +129,30 @@ def detect_hit():
             paddle.rewind()
 
                     
-    if x >= 900 and x <= 900:
+    if x >= 900 and x <= 910:
         if y >= playery2+60 and y <= playery2+100:
             paddle.play()
             yspeed = 5
             xspeed = -5
             paddle.rewind()
 
+
             
-    if x >= 100 and x <= 100 :
+    if x >= 100 and x <= 110 :
         if y <= playery+100 and y >= playery-40:
             paddle.play()
             xspeed = 5
             yspeed = -5
             paddle.rewind()
 
-    if x >= 100 and x <= 100 :
+    if x >= 100 and x <= 110 :
         if y >= playery+40 and y <= playery+60:
             paddle.play()
             xspeed = 5
             yspeed = 0
             paddle.rewind()
 
-    if x >= 100 and x <= 100:
+    if x >= 100 and x <= 110:
         if y >= playery+60 and y <= playery+100:
             paddle.play()
             yspeed = 5
@@ -156,13 +160,14 @@ def detect_hit():
             paddle.rewind()
 
 def win():
-    global score1, score2,x,y,yspeed,xspeed,mode,new_game
+    global score1, score2,x,y,yspeed,xspeed,mode,new_game,playery,playery2
     if x >= width-15 :
         score.play()
         score1 = score1 + 1
         new_game = True
         x = 507
         y = 500
+        
         score.rewind()
         return
 
@@ -207,23 +212,24 @@ def player2score():
     text(score2,575,250)
 
 def ball_direction():
-    global x,y
+    global x,y,ball
+    
     if ball == 1:
         x += xspeed
         y += yspeed
-    if ball == 2:
+    elif ball == 2:
         x += -xspeed
         y += yspeed
-    if ball == 3:
+    elif ball == 3:
         x += xspeed
         y += -yspeed
-    if ball == 4:
+    elif ball == 4:
         x += -xspeed
         y += -yspeed
-    if ball == 5:
+    elif ball == 5:
         x += -xspeed
         y = 500
-    if ball == 6:
-        x += -xspeed
+    elif ball == 6:
+        x += xspeed
         y = 500
     
