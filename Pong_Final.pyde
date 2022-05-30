@@ -1,8 +1,8 @@
 add_library('minim')    # add minim audio library
+import random 
 
-
-x = 200
-y = 100
+x = 507
+y = 500
 
 xspeed = 5
 yspeed = 5
@@ -11,6 +11,8 @@ playery2 = 450
 score1 = 0
 score2 = 0
 mode = 0 
+new_game = True
+
 ball_speed_up = 20
 ball_speed_down = 20
 ball_speed_up2 = 20
@@ -31,11 +33,16 @@ def setup():
   
     
 def draw():
-    global x,y,playerx,playery,mode,score1,score2, key_status,ball_speed_up,ball_speed_down,ball_speed_up2,ball_speed_down2,playery2
+    global x,y,playerx,playery,mode,score1,score2, key_status,ball_speed_up,ball_speed_down,ball_speed_up2,ball_speed_down2,playery2,new_game
     
     background(0)
     if mode == 0:
+        if new_game == True:
+            ball_path()
+            new_game = False
         game()
+        
+
     elif mode == 1:
         game_over()
     if "w" in key_status.keys() and key_status["w"]:
@@ -71,24 +78,28 @@ def keyReleased():
     key_status[key] = False
     key_status[keyCode] = False
     
+def ball_path():
+    global x,y,ball
+    ball = random.randrange(1,7)
+    
+    
 def game():
-    global x,y,playerx,playery,mode,score1,score2
+    global playerx,playery,mode,score1,score2,ball
+
     background(0)
+    ball_direction()
+
     design()
     player1score()
     player2score()
     ellipse(x,y,20,20)
     rect(100, playery, 10, 100)
     rect(900, playery2, 10, 100)
-    x += xspeed
-    y += yspeed
-       
+
     detect_hit()
 
 def detect_hit():
     global x,y,xspeed,yspeed,playery,score1,score2,mode,playery2,score,wall,paddle
-
-    
     win()
     if y >= height-15:
         wall.play()
@@ -145,14 +156,13 @@ def detect_hit():
             paddle.rewind()
 
 def win():
-    global score1, score2,x,y,yspeed,xspeed,mode
+    global score1, score2,x,y,yspeed,xspeed,mode,new_game
     if x >= width-15 :
         score.play()
         score1 = score1 + 1
-        yspeed = yspeed
-        xspeed = xspeed
-        x = 200
-        y = 100
+        new_game = True
+        x = 507
+        y = 500
         score.rewind()
         return
 
@@ -160,10 +170,9 @@ def win():
     elif x <= 15:
         score.play()
         score2 = score2 + 1
-        yspeed = -yspeed
-        xspeed = -xspeed
-        x = 200
-        y = 100
+        new_game = True
+        x = 507
+        y = 500
         score.rewind()
         return
 
@@ -176,7 +185,7 @@ def game_over():
 
     background(0,0,0,100)
     xspeed = 0
-    yspeed
+    yspeed = 0 
     ball_speed_up = 0
     ball_speed_down = 0
     ball_speed_up2 = 0
@@ -196,5 +205,25 @@ def player2score():
     fill(255)
     textSize(300)
     text(score2,575,250)
-    
+
+def ball_direction():
+    global x,y
+    if ball == 1:
+        x += xspeed
+        y += yspeed
+    if ball == 2:
+        x += -xspeed
+        y += yspeed
+    if ball == 3:
+        x += xspeed
+        y += -yspeed
+    if ball == 4:
+        x += -xspeed
+        y += -yspeed
+    if ball == 5:
+        x += -xspeed
+        y = 500
+    if ball == 6:
+        x += -xspeed
+        y = 500
     
