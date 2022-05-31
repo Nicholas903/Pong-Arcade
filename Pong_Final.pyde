@@ -6,6 +6,9 @@ y = 500
 
 xspeed = 5
 yspeed = 5
+xspeed2 = -5
+yspeed2 = -5
+
 playery = 450
 playery2 = 450
 score1 = 0
@@ -18,6 +21,8 @@ ball_speed_up = 20
 ball_speed_down = 20
 ball_speed_up2 = 20
 ball_speed_down2 = 20
+
+speed_list = [1,-1]
 
 def setup():
     global wall,score,paddle
@@ -34,12 +39,12 @@ def setup():
   
     
 def draw():
-    global x,y,playerx,playery,mode,score1,score2, key_status,ball_speed_up,ball_speed_down,ball_speed_up2,ball_speed_down2,playery2,new_game
+    global x,y,playerx,playery,mode,score1,score2, key_status,ball_speed_up,ball_speed_down,ball_speed_up2,ball_speed_down2,playery2,new_game,xspeed2,yspeed2
     
     background(0)
     if mode == 0:
         if new_game == True:
-            ball_path()
+            ball_direction()
             new_game = False
         game()
         
@@ -79,13 +84,11 @@ def keyReleased():
     key_status[key] = False
     key_status[keyCode] = False
     
-def ball_path():
-    global x,y,ball
-    ball = random.randrange(1,2)
+
     
     
 def game():
-    global playerx,playery,mode,score1,score2,ball
+    global playerx,playery,mode,score1,score2,ball,x,y
 
     background(0)
     detect_hit()
@@ -96,13 +99,13 @@ def game():
     ellipse(x,y,20,20)
     rect(100, playery, 10, 100)
     rect(900, playery2, 10, 100)
-
+    x += xspeed
+    y += yspeed
     
 
 def detect_hit():
-    global x,y,xspeed,yspeed,playery,score1,score2,mode,playery2,score,wall,paddle
+    global x,y,xspeed,yspeed,playery,score1,score2,mode,playery2,score,wall,paddle,ball,xspeed2,yspeed2
     win()
-    ball_direction()
 
     if y >= height-15:
         wall.play()
@@ -113,7 +116,6 @@ def detect_hit():
         yspeed = yspeed * -1.01
         wall.rewind()
 
-    print(x,y)
     if x >= 900 and x <= 910:
         if y <= playery2+100 and y >= playery2-40:
             paddle.play()
@@ -124,9 +126,10 @@ def detect_hit():
     if x >= 900 and x <= 910:
         if y >= playery2+40 and y <= playery2+60:
             paddle.play()
-            xspeed = -5
-            yspeed = 0
             paddle.rewind()
+            xspeed2 = xspeed
+            yspeed = 0
+   
 
                     
     if x >= 900 and x <= 910:
@@ -145,12 +148,21 @@ def detect_hit():
             yspeed = -5
             paddle.rewind()
 
+    if x >= 100 and x <= 110:
+        if y >= playery+40 and y <= playery+60:
+            paddle.play()
+            paddle.rewind()
+            xspeed2 = xspeed
+            yspeed = 0
+       
     if x >= 100 and x <= 110 :
         if y >= playery+40 and y <= playery+60:
             paddle.play()
-            xspeed = 5
-            yspeed = 0
             paddle.rewind()
+            xspeed2 = -xspeed
+            yspeed = 0  
+            
+            
 
     if x >= 100 and x <= 110:
         if y >= playery+60 and y <= playery+100:
@@ -160,7 +172,7 @@ def detect_hit():
             paddle.rewind()
 
 def win():
-    global score1, score2,x,y,yspeed,xspeed,mode,new_game,playery,playery2
+    global score1, score2,x,y,yspeed,xspeed,mode,new_game,playery,playery2,xspeed2,yspeed2
     if x >= width-15 :
         score.play()
         score1 = score1 + 1
@@ -169,6 +181,7 @@ def win():
         y = 500
         
         score.rewind()
+        delay(2000)
         return
 
         
@@ -179,6 +192,7 @@ def win():
         x = 507
         y = 500
         score.rewind()
+        delay(2000)
         return
 
     if score1 == 9:
@@ -186,7 +200,7 @@ def win():
     elif score2 == 9:
         mode = 1
 def game_over():
-    global x,y,xspeed,yspeed,ball_speed_down,ball_speed_up2,ball_speed_down2
+    global x,y,xspeed,yspeed,ball_speed_down,ball_speed_up2,ball_speed_down2,xspeed2,yspeed2
 
     background(0,0,0,100)
     xspeed = 0
@@ -212,24 +226,13 @@ def player2score():
     text(score2,575,250)
 
 def ball_direction():
-    global x,y,ball
+    global x,y,ball,xspeed,yspeed
     
-    if ball == 1:
-        x += xspeed
-        y += yspeed
-    elif ball == 2:
-        x += -xspeed
-        y += yspeed
-    elif ball == 3:
-        x += xspeed
-        y += -yspeed
-    elif ball == 4:
-        x += -xspeed
-        y += -yspeed
-    elif ball == 5:
-        x += -xspeed
-        y = 500
-    elif ball == 6:
-        x += xspeed
-        y = 500
+    xspeed_factor = random.randint(0,1)
+    yspeed_factor = random.randint(0,1)
+        
+    xspeed *= speed_list[xspeed_factor]
+    yspeed *= speed_list[yspeed_factor]
+    
+    
     
