@@ -2,7 +2,6 @@
 
 add_library('minim')    # add minim audio library
 import random   # adds random number
-import time 
 timer = True
 n = 0
 x = 507
@@ -15,9 +14,8 @@ playery = 450
 playery2 = 450
 score1 = 0
 score2 = 0
-mode = 0 
+mode = 0
 new_game = True
-
 ball = 0
 
 ball_speed_up = 20
@@ -32,38 +30,99 @@ speed_list = [1,-1,0]
 # ################################################
 
 def setup():
-    global wall,score,paddle, new_game
+    global wall,score,paddle
     size (1000,1000)
     frameRate(120)
     minim=Minim(this)
     score = minim.loadFile("Pong Score.mp3")
     paddle = minim.loadFile("Pong Paddle.mp3")
     wall = minim.loadFile("Pong Wall.mp3")
-
-
-
-  
-    
+    retro = createFont("retro.ttf", 150)
+    textFont(retro)
+   
 def draw():
     global x,y,playerx,playery,mode,score1,score2, key_status,ball_speed_up,ball_speed_down,ball_speed_up2,ball_speed_down2,playery2,new_game
-    
-    background(0)
-    # if mode is 2, when new game starts ball direction changes
+
+    background(204,204,0)
+
+    # when mode is 0 geerate the menu screen
     if mode == 0:
+        new_game = True
+        menu()
+       
+    # if mode is 1 generate game rules        
+    elif mode == 1:
+        global score1,score2
+        strokeWeight(6)
+        background(255)
+        fill(255)
+        rect(350,25,300,50)
+        fill(0)
+        textSize(35)
+        text("Rules of Pong",420,60)
+        text("1. Pong is a two-dimensional sports game that simulates table tennis.",50,110)
+        text("2. The player controles an in-game paddle by moving it vertically ",50,140)
+        text("across the left or right side of the screen.",85,170)
+        text("3. They can compete against the other player controlling the ",50,200)
+        text("second paddle on the opposing side.",80,230)
+        text("4. Players use the paddes to hit a ball back and forth.",50,260)
+        text("5. The goal is for each player to reach nine points before the other opponent.",50,290)
+        text("6. Points are earned when one payer fails to return the ball to he other.",50, 320)
+        textSize(25)
+
+        text("Up and Down is the paddle contoles for player 2.",550,800)
+        text("W and S is the paddle contoles for player 1.",50,800)
+
+        fill(255)
+        rect(800,850,150,100)
+        textSize(40)
+
+        fill(0)
+        text("Return",830,910)
+
+        Image = loadImage("Arrowkeys.png")
+        Image2 = loadImage("keys.jpg")
+
+        image(Image,550,350)
+
+        image(Image2,0,350)
+
+        # adds text that blinks
+        global timer, n
+        if timer == True:
+            fill(0)
+            text('Press Enter To Begin',300,910)
+            for i in range(1,200):
+                n += 0.001
+                print(n)
+                if n >= 2.5:
+                    n = 0
+                    timer = False
+               
+        if timer == False:
+            fill(255)
+            text('Press Enter To Begin',300,910)
+
+            for i in range(1,200):
+                n += 0.001
+                print(n)
+                if n >= 2.5:
+                    n = 0
+                    timer = True
+       
+    # if mode is 2, when new game starts ball direction changes
+    if mode == 2:
         if new_game == True:
             ball_direction()
             new_game = False
-            
         game()
-            
        
-        
-    # when mode is 3 print player 1 congradulations 
-    elif mode == 1:
+    # when mode is 3 print player 1 congradulations
+    elif mode == 3:
         player1_win()
-        
-    # when mode is 4 print player 2 congradulations         
-    elif mode == 2:
+       
+    # when mode is 4 print player 2 congradulations        
+    elif mode == 4:
         player2_win()
     # player movement for paddle  
     # player 1 controles          
@@ -77,8 +136,8 @@ def draw():
         ball_speed_up = 20
         if playery >= 900:
             ball_speed_down = 0
-            
-    # Player 2 controles         
+           
+    # Player 2 controles        
     if UP in key_status.keys() and key_status[UP]:
         playery2 += -ball_speed_up2
         ball_speed_down2 = 20
@@ -89,24 +148,29 @@ def draw():
         ball_speed_up2 = 20
         if playery2 >= 900:
             ball_speed_down2 = 0
-        
-key_status = {}     
+       
+key_status = {}    
 def keyPressed():
     global key_status
     key_status[key] = True
     key_status[keyCode] = True
     global mode
-    
    
+    # if enter is pessed mode is 1
+    if mode == 0 and(key == ENTER):
+        mode = 1
+   
+    # if enter is pressed after the first mode is 2 and game will start  
+    elif mode == 1 and(key == ENTER):
+        mode = 2
+
 def keyReleased():
     global key_status
     key_status[key] = False
     key_status[keyCode] = False
+   
 
-    
-
-    
-    
+   
 #game board and interacives
 def game():
     global playerx,playery,mode,score1,score2,ball,x,y
@@ -122,7 +186,7 @@ def game():
     rect(900, playery2, 10, 100)
     x += xspeed
     y += yspeed
-
+   
 # detects if the ball has collided with the wall or if it hts the players paddle
 def detect_hit():
     global x,y,xspeed,yspeed,playery,score1,score2,mode,playery2,score,wall,paddle,ball
@@ -152,16 +216,16 @@ def detect_hit():
             yspeed = 0
    
 
-                    
+                   
     if x >= 900 and x <= 910:
-        if y >= playery2+60 and y <= playery2+110:
+        if y >= playery2+60 and y <= playery2+100:
             paddle.play()
             yspeed = 5
             xspeed = -5
             paddle.rewind()
 
 
-            
+           
     if x >= 100 and x <= 110 :
         if y <= playery+100 and y >= playery-40:
             paddle.play()
@@ -175,10 +239,10 @@ def detect_hit():
             paddle.rewind()
             xspeed = xspeed
             yspeed = 0
-            
+           
 
     if x >= 100 and x <= 110:
-        if y >= playery+60 and y <= playery+110:
+        if y >= playery+60 and y <= playery+100:
             paddle.play()
             yspeed = 5
             xspeed = 5
@@ -194,10 +258,11 @@ def win():
         yspeed = 5
         x = 507
         y = 500
+       
         score.rewind()
         return
 
-        
+       
     elif x <= 15:
         score.play()
         score2 = score2 + 1
@@ -210,32 +275,59 @@ def win():
 
     if score1 == 9:
         new_game = True
-        mode = 1
+        
+        mode = 3
     elif score2 == 9:
         new_game = True
-        mode = 2
-        
-# congradulations for player 1 and return to menu         
+        mode = 4
+       
+# congradulations for player 1 and return to menu        
 def player1_win():
     global x,y,xspeed,yspeed,ball_speed_down,ball_speed_up2,ball_speed_down2,timer,n
 
     background(0)
-    
+   
     ball_speed_up = 0
     ball_speed_down = 0
     ball_speed_up2 = 0
     ball_speed_down2 = 0
 
-   
+    fill(255)
+    rect(400,400,200,150)
+    fill(0)
+    textSize(50)
+    text("Menu",460,490)
 
     fill(255)
     textSize(55)
-    text("Cogratulations player 1!",200,700)
-    text("Better luck next time player 2.",150,750)
-    text("Game over!",350,300)
-        
-                
-# congradulations for player 1 and return to menu         
+    text("Congradulations player 1!",250,700)
+    text("Better luck next time player 2!",230,750)
+   
+    # adds text that blinks
+    if timer == True:
+        fill(255)
+        textSize(50)
+        text("Game over!",400,300)
+        for i in range(1,200):
+            n += 0.001
+            print(n)
+            if n >= 2.5:
+                n = 0
+                timer = False
+               
+    if timer == False:
+        fill(0)
+        textSize(50)
+        text("Game over!",400,300)
+
+        for i in range(1,200):
+            n += 0.001
+            print(n)
+            if n >= 2.5:
+                n = 0
+                timer = True
+               
+# congradulations for player 1 and return to menu        
 def player2_win():
     global x,y,xspeed,yspeed,ball_speed_down,ball_speed_up2,ball_speed_down2,timer,n
 
@@ -246,40 +338,114 @@ def player2_win():
     ball_speed_up2 = 0
     ball_speed_down2 = 0
 
+    fill(255)
+    rect(400,400,200,150)
+    fill(0)
+    textSize(50)
+    text("Menu",470,490)
 
     fill(255)
     textSize(55)
-    text("Cogratulations player 2!",200,700)
-    text("Better luck next time player 1.",150,750)
-    text("Game over!",350,300)
+    text("Congradulations player 2!",200,700)
+    text("Better luck next time player 1!",200,750)
+    # adds text that blinks
+    if timer == True:
+        fill(255)
+        textSize(50)
+        text("Game over!",430,300)
+        for i in range(1,200):
+            n += 0.001
+            print(n)
+            if n >= 2.5:
+                n = 0
+                timer = False
+               
+    if timer == False:
+        fill(0)
+        textSize(50)
+        text("Game over!",430,300)
 
-        
-                
+        for i in range(1,200):
+            n += 0.001
+            print(n)
+            if n >= 2.5:
+                n = 0
+                timer = True
+               
 # adds the middle design for the game                
 def design():
     for i in range(20):
         rect(500,50*i,15,30)
 
-# player 1 score               
+# player 1 score              
 def player1score():
     fill(255)
     textSize(300)
-    text(score1,250,250)
-    
+    text(score1,280,250)
+   
 # player 2 score
 def player2score():
     fill(255)
     textSize(300)
-    text(score2,575,250)
+    text(score2,630,250)
 
 # the direction the ball will start in when a game starts
 def ball_direction():
     global x,y,ball,xspeed,yspeed
     xspeed = 3
     yspeed = 3
+   
     xspeed_factor = random.randint(0,1)
     yspeed_factor = random.randint(0,2)
-    
+   
     xspeed *= speed_list[xspeed_factor]
-    yspeed *= speed_list[yspeed_factor]
-    
+    yspeed *= speed_list[yspeed_factor]  
+
+   
+# main menu            
+def menu():
+    fill (0)
+    rect(150,150,700,700)
+    textSize(70)
+    fill(255)
+    text("Welcome to pong!",300,250)  
+   
+    global timer, n
+    # adds text that blinks
+    if timer == True:
+        fill(255)
+        text('Press Enter To Start',260,700)
+        for i in range(1,200):
+            n += 0.001
+            print(n)
+            if n >= 2.5:
+                n = 0
+                timer = False
+               
+    if timer == False:
+        fill(0)
+        text('Press Enter To Start',250,700)
+
+        for i in range(1,200):
+            n += 0.001
+            print(n)
+            if n >= 2.5:
+                n = 0
+                timer = True
+               
+# if someone clicks mouse            
+def mousePressed():
+    # checks clicks if it is in respective mode/menu
+    global mode,score1,score2,grid,turn,x,y,playery,playery2
+   
+    # retuns to menu
+    if mouseX < 950 and mouseX >800 and mouseY < 950 and mouseY > 850 and mode == 1:
+        mode = 0
+   
+    # when game is over and a player has won return to menu button  
+    elif mouseX < 600 and mouseX > 400 and mouseY < 550 and mouseY > 400 and mode == 3 or mode == 4:
+        mode = 0  
+        score1 = 0
+        score2 = 0
+        playery = 450
+        playery2 = 450
