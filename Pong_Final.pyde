@@ -274,11 +274,11 @@ def win():
         score.rewind()
         return
 
-    if score1 == 1:
+    if score1 == 9:
         new_game = True
         
         mode = 3
-    elif score2 == 1:
+    elif score2 == 9:
         new_game = True
         mode = 4
        
