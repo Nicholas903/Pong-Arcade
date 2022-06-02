@@ -39,9 +39,10 @@ def setup():
     wall = minim.loadFile("Pong Wall.mp3")
     retro = createFont("retro.ttf", 150)
     textFont(retro)
-   
+frame, max_frame = 0, 52
+
 def draw():
-    global x,y,playerx,playery,mode,score1,score2, key_status,ball_speed_up,ball_speed_down,ball_speed_up2,ball_speed_down2,playery2,new_game
+    global x,y,playerx,playery,mode,score1,score2, key_status,ball_speed_up,ball_speed_down,ball_speed_up2,ball_speed_down2,playery2,new_game,frame
 
     background(204,204,0)
 
@@ -273,17 +274,17 @@ def win():
         score.rewind()
         return
 
-    if score1 == 9:
+    if score1 == 1:
         new_game = True
         
         mode = 3
-    elif score2 == 9:
+    elif score2 == 1:
         new_game = True
         mode = 4
        
-# congradulations for player 1 and return to menu        
+# congratulations for player 1 and return to menu        
 def player1_win():
-    global x,y,xspeed,yspeed,ball_speed_down,ball_speed_up2,ball_speed_down2,timer,n
+    global x,y,xspeed,yspeed,ball_speed_down,ball_speed_up2,ball_speed_down2,timer,n,frame
 
     background(0)
    
@@ -307,7 +308,7 @@ def player1_win():
     if timer == True:
         fill(255)
         textSize(50)
-        text("Game over!",400,300)
+        text("Game over!",400,350)
         for i in range(1,200):
             n += 0.001
             print(n)
@@ -318,7 +319,7 @@ def player1_win():
     if timer == False:
         fill(0)
         textSize(50)
-        text("Game over!",400,300)
+        text("Game over!",400,350)
 
         for i in range(1,200):
             n += 0.001
@@ -326,10 +327,16 @@ def player1_win():
             if n >= 2.5:
                 n = 0
                 timer = True
-               
-# congradulations for player 1 and return to menu        
+    # adds congratulations animation          
+    frame += 1
+    if frame >= max_frame:
+        frame = 0
+    print("(" + str(frame) + ")")
+    image(loadImage("(" + str(frame) + ").gif"), 245, 0, 500, 281)
+            
+# congratulations for player 2 and return to menu    
 def player2_win():
-    global x,y,xspeed,yspeed,ball_speed_down,ball_speed_up2,ball_speed_down2,timer,n
+    global x,y,xspeed,yspeed,ball_speed_down,ball_speed_up2,ball_speed_down2,timer,n,frame
 
     background(0)
    
@@ -342,17 +349,18 @@ def player2_win():
     rect(400,400,200,150)
     fill(0)
     textSize(50)
-    text("Menu",470,490)
+    text("Menu",460,490)
 
     fill(255)
     textSize(55)
-    text("Congradulations player 2!",200,700)
-    text("Better luck next time player 1!",200,750)
+    text("Congradulations player 2!",250,700)
+    text("Better luck next time player 1!",230,750)
+   
     # adds text that blinks
     if timer == True:
         fill(255)
         textSize(50)
-        text("Game over!",430,300)
+        text("Game over!",400,350)
         for i in range(1,200):
             n += 0.001
             print(n)
@@ -363,7 +371,7 @@ def player2_win():
     if timer == False:
         fill(0)
         textSize(50)
-        text("Game over!",430,300)
+        text("Game over!",400,350)
 
         for i in range(1,200):
             n += 0.001
@@ -371,6 +379,13 @@ def player2_win():
             if n >= 2.5:
                 n = 0
                 timer = True
+                
+    # adds congratulations animation              
+    frame += 1
+    if frame >= max_frame:
+        frame = 0
+    print("(" + str(frame) + ")")
+    image(loadImage("(" + str(frame) + ").gif"), 245, 0, 500, 281) 
                
 # adds the middle design for the game                
 def design():
